@@ -1,100 +1,105 @@
+## Movie App Database
+
 ```mermaid
 erDiagram
     MOVIE {
-        int movie_id PK
-        string title
-        string description
-        number budget
+        int id PK
+        varchar title
+        text description
+        int budget
         date release_date
-        number duration
-        int poster_id
+        int duration
+        int poster_id FK "ref-s file"
+        int country_id FK "ref-s country"
         date created_at
         date updated_at
     }
     PERSON {
-        int person_id PK
-        string first_name
-        string last_name
-        string biography
+        int id PK
+        varchar first_name 
+        varchar last_name 
+        text biography
         date date_of_birth
-        string gender
+        varchar gender 
+        int photo_id FK "ref-s file" 
         date created_at
         date updated_at
     }
     COUNTRY {
-        int country_id PK
-        string name
+        int id PK
+        varchar code
+        varchar name
+        varchar full_name
         date created_at
         date updated_at
     }
     GENRE {
-        int genre_id PK
-        string name
+        int id PK
+        varchar name
         date created_at
         date updated_at
     }
     MOVIE-GENRE {
-        int movie_genre_id PK
-        int genre_id FK "ref-s genre"
-        int movie_id FK "ref-s movie"
+        int genre_id FK "ref-s genre" 
+        int movie_id FK "ref-s movie" 
         date created_at
         date updated_at
     }
     
     USER {
-        int user_id
-        string username
-        string email
-        string password
-        string person_id FK
-        string avatar FK
+        int id PK
+        varchar username
+        varchar email
+        varchar password
+        varchar person_id FK "ref-s file"
+        varchar avatar_id FK "ref-s file"
         date created_at
         date updated_at
     }
-    ROLE {
-        int role_id
-        int person_id FK "ref-s PERSON"
-        int movie_id FK "ref-s MOVIE"
+    ACTOR {
+        int person_id FK "ref-s PERSON" 
+        int movie_id FK "ref-s MOVIE" 
         date created_at
         date updated_at
     }
     CHARACTER {
-        int character_id
-        string name
-        int person_id FK
-        int movie_id FK "ref-s MOVIE"
+        int id PK
+        varchar name 
+        text description
+        int person_id FK 
+        int movie_id FK "ref-s MOVIE" 
+        varchar role 
         date created_at
         date updated_at
     }
     FILE {
-        int file_id
-        string file_type
-        string mime_type
-        string key
-        string url
+        int id PK
+        varchar name
+        varchar mime_type
+        varchar key
+        varchar url
         date created_at
         date updated_at
     }
     USER-MOVIE {
-        int user_movie_id
-        int user_id
-        int movie_id
+        int user_id FK "ref-s user"
+        int movie_id FK "ref-s movie"
         date created_at
         date updated_at
     }
     PERSON-FILE {
-        int person_file_id
         int person_id
         int file_id
         date created_at
         date updated_at
     }
+    
     COUNTRY ||--o{ PERSON : generates
     COUNTRY ||--o{ MOVIE : generates
 
     PERSON ||--o{ MOVIE : creates
     PERSON ||--o| USER : is
-    PERSON ||--o| ROLE : plays
+    PERSON ||--o| ACTOR : is
     PERSON ||--|{ PERSON-FILE : has
 
     MOVIE ||--|{ MOVIE-GENRE : applies
